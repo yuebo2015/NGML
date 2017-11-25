@@ -1,0 +1,146 @@
+1, clear是什么意思？
+clear all 清除了所有的变量，包括全局变量global，clear 清除不了全局变量，只能清除普通变量。
+
+2，close all是什么意思？
+关闭所有的figure窗口。
+
+3，clc是什么意思？
+清屏。
+
+4，fprintf常用法？
+%打印字符串
+fprintf('Loading and Visualizing Data ...\n')
+%格式输出
+fprintf('  \t%d\t\t%f\t%f\n', i, error_train(i), error_val(i));
+fprintf(['Cost at theta = [1 ; 1]: %f '...
+         '\n(this value should be about 303.993192)\n'], J);
+
+5，.mat文件的生成和加载？
+假如你的矩阵A.B都已赋值，现在需要将A,B矩阵保存成mat格式文件，执行如下命令：save mydata A B 就会把A B矩阵数据从内存保存到mydata.dat文件中了
+>> A = [1 2; 3 5];
+>> B = [7 8; 9 10];
+>> save mydata A B；
+>> load('mydata.mat')；
+load之后的效果就是定义了A，B是一样的。
+
+6， load('ex5data1.mat')是什么意思？
+把ex5data1.mat中的数据加载到内存中（每块数据落成文件时都有名字，所以重新加载后也有名字）。
+
+7，size的用法
+>> A = [1 2; 3 4; 5 6];
+>> A
+A =
+     1     2
+     3     4
+     5     6
+>> size(A)
+ans =
+     3     2
+>> size(A, 1)
+ans =
+     3
+>> size(A, 2)
+ans =
+     2
+
+8，怎样描点，如下：
+% Plot training data
+plot(X, y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
+xlabel('Change in water level (x)');
+ylabel('Water flowing out of the dam (y)');
+
+9，pause是什么意思，常用法?
+Halt execution temporarily
+一般是为了动态观察变化过程 pause（a）暂停a秒后执行下一条指令
+pause, by itself, causes the currently executing function to stop and wait for you to press any key before continuing. 
+
+10，怎样定义和引用一个函数（简单用法）？
+定义一个函数
+function [X_norm, mu, sigma] = featureNormalize(X)
+%FEATURENORMALIZE Normalizes the features in X 
+%   FEATURENORMALIZE(X) returns a normalized version of X where
+%   the mean value of each feature is 0 and the standard deviation
+%   is 1. This is often a good preprocessing step to do when
+%   working with learning algorithms.
+
+mu = mean(X);
+X_norm = bsxfun(@minus, X, mu);
+
+sigma = std(X_norm);
+X_norm = bsxfun(@rdivide, X_norm, sigma);
+
+
+% ============================================================
+
+end
+该函数单独存放在featureNormalize.m中（在使用中文件名和函数名常常一致）
+调用上面的函数
+[first, second, third] = featureNormalize(X)；(注意接收函数值即使一个返回值也要用[])
+
+
+11，怎样在“描点”图上添加其它元素，即接着在原图上画？
+plot(X, y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
+xlabel('Change in water level (x)');
+ylabel('Water flowing out of the dam (y)');
+hold on;
+%连接点画折现图
+plot(X, [ones(m, 1) X]*theta, '--', 'LineWidth', 2) 
+hold off;
+
+12，怎样画两条折线？
+plot(1:m, error_train, 1:m, error_val);
+title('Learning curve for linear regression')
+legend('Train', 'Cross Validation')
+xlabel('Number of training examples')
+ylabel('Error')
+axis([0 13 0 150])
+
+13，bsxfun函数常用法？
+bsxfun函数
+函数功能：两个数组间元素逐个计算的二值操作
+
+使用方法：C=bsxfun(fun,A,B)
+
+两个数组A合B间元素逐个计算的二值操作，fun是函数句柄或者m文件，也可以为如下内置函数：
+
+@plus 加
+@minus 减
+@times 数组乘《Simulink与信号处理》
+@rdivide 左除
+@ldivide 右除
+@power 数组幂乘
+@max 二值最大值
+@min 二值最小值
+@rem 余数
+@mod 求模
+@atan2 四象限反正切
+@hypot 平方和的平方根
+@eq 等于
+@ne 不等于
+@lt 小于www.iLoveMatlab.cn
+@le 小于或等于
+@gt 大于
+@ge 大于或等于
+@and 逻辑并
+@or 逻辑或
+@xor 逻辑异或
+
+应用举例：
+
+在此例子中，bsxfun函数用来计算矩阵A每一列减去其对应列的平均值.
+
+A = magic(5)
+A =
+17 24 1 8 15
+23 5 7 14 16
+4 6 13 20 22
+10 12 19 21 3
+11 18 25 2 9
+A = bsxfun(@minus, A, mean(A))book.iLoveMatlab.cn
+A =
+
+4 11 -12 -5 2
+10 -8 -6 1 3
+-9 -7 0 7 9
+-3 -1 6 8 -10
+-2 5 12 -11 -4
